@@ -34,7 +34,7 @@ jobs:
       uses: actions/upload-artifact@v4.6.0
       with:
         name: 4cc-${{ matrix.suffix }}
-        path: ../current_dist_super_x64/4coder/  # having "x64" in path might have to change
+        path: current_dist_super_x64/4coder/  # having "x64" in path might have to change
 
   create_gh_release:
     if: startsWith(github.ref, 'refs/tags/')
