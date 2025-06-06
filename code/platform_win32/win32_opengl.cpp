@@ -155,7 +155,7 @@ win32_gl_create_window(HWND *wnd_out, HGLRC *context_out, DWORD style, RECT rect
         log_os(" registering graphics class...\n");
         
         WNDCLASSW wndclass = {};
-        wndclass.style = CS_HREDRAW|CS_VREDRAW|CS_DBLCLKS;
+        wndclass.style = CS_HREDRAW|CS_VREDRAW|CS_DBLCLKS|CS_OWNDC;
         wndclass.lpfnWndProc = win32_proc;
         wndclass.hIcon = LoadIconW(GetModuleHandle(0), L"main");
         wndclass.hInstance = this_instance;
