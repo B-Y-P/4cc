@@ -47,6 +47,6 @@ if %ERRORLEVEL% neq 0 (set FirstError=1)
 if %ERRORLEVEL% neq 0 (goto END)
 popd
 
-%build_root%\build
+%build_root%\build %*
 :END
 if %ERRORLEVEL% neq 0 (set FirstError=1)

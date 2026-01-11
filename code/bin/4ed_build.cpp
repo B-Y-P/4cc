@@ -143,6 +143,7 @@ char **platform_includes[Platform_COUNT][Compiler_COUNT] = {
 };
 
 char *default_custom_target = "../code/custom/4coder_default_bindings.cpp";
+char *default_custom_script = "custom/bin/buildsuper_";
 
 // NOTE(allen): Build flags
 
@@ -532,22 +533,10 @@ buildsuper(Arena *arena, char *cdir, char *file, u32 arch){
     
     Temp_Dir temp = fm_pushdir(fm_str(arena, BUILD_DIR));
     
-    char *build_script_postfix = "";
-    switch (This_OS){
-        case Platform_Windows:
-        {
-            build_script_postfix = "-win";
-        }break;
-        case Platform_Linux:
-        {
-            build_script_postfix = "-linux";
-        }break;
-        case Platform_Mac:
-        {
-            build_script_postfix = "-mac";
-        }break;
-    }
-    char *build_script = fm_str(arena, "custom/bin/buildsuper_", arch_names[arch], build_script_postfix, BAT);
+    char *build_script_postfix = (This_OS == Platform_Windows ? "-win"   : 
+                                  This_OS == Platform_Linux   ? "-linux" :
+                                  This_OS == Platform_Mac     ? "-mac"   : "");
+    char *build_script = fm_str(arena, default_custom_script, arch_names[arch], build_script_postfix, BAT);
     
     char *build_command = fm_str(arena, "\"", cdir, "/", build_script, "\" \"", file, "\"");
     if (This_OS == Platform_Windows){
@@ -722,6 +711,13 @@ int main(int argc, char **argv){
 #if defined(DEV_BUILD_X86) || defined(OPT_BUILD_X86)
     arch = Arch_X86;
 #endif
+    
+    for(int i=0; i<argc; i++){
+        if (string_match(SCu8(argv[i]), string_u8_litexpr("-U")) && i+2<argc){
+            default_custom_target = argv[i+1];
+            default_custom_script = argv[i+2];
+        }
+    }
     
 #if defined(DEV_BUILD) || defined(OPT_BUILD) || defined(DEV_BUILD_X86) || defined(OPT_BUILD_X86)
     standard_build(&arena, cdir, flags, arch);

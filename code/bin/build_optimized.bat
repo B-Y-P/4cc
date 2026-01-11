@@ -1,3 +1,3 @@
 @echo off
 
-call bin\build.bat /DOPT_BUILD %1
+call bin\build.bat /DOPT_BUILD %*
